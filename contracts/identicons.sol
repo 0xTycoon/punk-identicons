@@ -5,15 +5,11 @@ pragma solidity ^0.8.17;
 import "hardhat/console.sol";
 
 contract Identicons {
-
     IPunkBlocks pb = IPunkBlocks(0xe91Eb909203c8C8cAd61f86fc44EDeE9023bdA4D);
-
-
     struct Trait {
         bytes32 hash;
         uint256 sample;
     }
-
     struct Config {
         Trait[] superRare;
         Trait[] baseTraits;
@@ -23,9 +19,7 @@ contract Identicons {
     }
     uint64 nextConfigId;
     mapping (uint64 => Config) private cfg;
-
     constructor() {
-
     }
 
     function config(uint64 c) public returns (Config memory) {
@@ -63,6 +57,8 @@ contract Identicons {
         }
         c.population = _population;
         nextConfigId++;
+
+        _pickBase(uint160(msg.sender), 0);
     }
 
     /**
@@ -72,18 +68,20 @@ contract Identicons {
         uint256 _entropy,
         uint64 _cid
     ) internal view returns (uint256 baseIndex) {
-
-        uint16 i =  uint16(_uniform(_entropy, cfg[_cid].baseTraits.length));
-        //Trait pick;
+        uint256 size = cfg[_cid].baseTraits.length;
+        uint16 i =  uint16(_uniform(_entropy, size));
         uint n;
         while (true) {
             n = _uniform(_entropy, cfg[_cid].population);
             _entropy++;
-            //pick = cfg[_cid].baseTraits[i];
             if (cfg[_cid].baseTraits[i].sample >= n) {
                 baseIndex = i;
-                console.log("PICKED A BLOCK", uint(baseIndex));
+                console.log("PICKED A BASE:", uint(baseIndex));
                 break;
+            }
+            i++;
+            if (i == size) {
+                i = 0; // wrap around, keep picking
             }
         }
         return baseIndex;
