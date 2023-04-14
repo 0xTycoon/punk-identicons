@@ -1,4 +1,5 @@
-// SPDX-License-Identifier: UNLICENSED
+// SPDX-License-Identifier: MiT
+// Author: tycoon.eth
 pragma solidity ^0.8.17;
 
 // Uncomment this line to use console.log
@@ -6,43 +7,44 @@ import "hardhat/console.sol";
 
 /**
 
+(_____ \           | |
+ _____) )   _ ____ | |  _
+|  ____/ | | |  _ \| |_/ )
+| |    | |_| | | | |  _ (
+|_|    |____/|_| |_|_| \_)
 
-2^(4*N) hashes, where n is number of 0
-(2^(4*14) / 350000000) seconds to years
+ _     _                  _
+| |   | |             _  (_)
+| | __| |_____ ____ _| |_ _  ____ ___  ____   ___
+| |/ _  | ___ |  _ (_   _) |/ ___) _ \|  _ \ /___)
+| ( (_| | ____| | | || |_| ( (__| |_| | | | |___ |
+|_|\____|_____)_| |_| \__)_|\____)___/|_| |_(___/
 
-N = number of leading zeros
-350000000 = 350 Megahashes (MH)
+Punk Identicons - generate punks based on a random number, such as an Ethereum
+address (which is a 160-bit number).
 
-17 = 26,722 years
-16 = 1,670 years
-15 = 104 years
-14 = 6.5 years
-13 = 0.4 years
-12 = 1.3 weeks
-11 = 14 hours
-10 = 0.9 hours
-
-The above is for 1 GPU. Someone with 1000 GPUs may
-take significantly faster.
+Uses punkblocks to source the traits and assemble them on an SVG.
 
 */
 
 contract Identicons {
+
     IPunkBlocks pb = IPunkBlocks(0xe91Eb909203c8C8cAd61f86fc44EDeE9023bdA4D);
     struct Trait {
-        bytes32 hash;
-        uint128 sample;
-        uint128 list;
+        bytes32 hash;   // The hash of the name
+        uint128 sample; // count of occurrences in a population
+        uint128 list;   //
     }
     struct Config {
         Trait[18] superRare;     // Rare base traits. Like a mapping, leadingZeros => Trait.
         Trait[] baseTraits;      // Base traits, male & female
-        Trait[][13] largeTraits; // the "male" traits
-        Trait[][13] smallTraits; // the "female" traits
+        Trait[][13] largeTraits; // the "male" traits, grouped by lists to choose from
+        Trait[][13] smallTraits; // the "female" traits, grouped by lists to choose from
         uint256 population;
     }
-    uint64 nextConfigId;
+    uint64 public nextConfigId;
     mapping (uint64 => Config) private cfg;
+
     constructor() {
     }
 
@@ -50,6 +52,20 @@ contract Identicons {
         return cfg[c];
     }
 
+    /**
+    * @dev Set a new configuration for picking
+    * @param _superRare The super-rare traits assigned depending on the number
+    *    of leading zeros. Each trait.sample sets how many zeros will be required
+    *    to match the trait.
+    * @param _baseTraits. A list of all the faces, aka "base traits". These
+    *    will be used to determine the type of the punk and traits will be
+    *    drawn on top.
+    * @param _largeTraits. A list of all the large (typically male) traits to
+    *    choose from.
+    * @param _smallTraits. A list of all the small (typically female) traits to
+    *    choose from.
+    * @param _population the total population.
+    */
     function setConfig(
         Trait[] calldata _superRare,
         Trait[] calldata _baseTraits,
@@ -59,16 +75,19 @@ contract Identicons {
         uint256 info;
         Config storage c = cfg[nextConfigId];
         for (uint256 i = 0; i < _superRare.length; i++) {
+            require(_superRare[i].sample < _population, "sample too big");
             info = pb.blocksInfo(_superRare[i].hash);
             require(info > 0, "superare block not found");
             c.superRare[_superRare[i].sample] = _superRare[i]; // key by sample (leading zeros)
         }
         for (uint256 i = 0; i < _baseTraits.length; i++) {
+            require(_baseTraits[i].sample < _population, "sample too big");
             info = pb.blocksInfo(_baseTraits[i].hash);
             require(info > 0, "base block not found");
             c.baseTraits.push(_baseTraits[i]);
         }
         for (uint256 i = 0; i < _largeTraits.length; i++) {
+            require(_largeTraits[i].sample < _population, "sample too big");
             info = pb.blocksInfo(_largeTraits[i].hash);
             require(info > 0, "large block not found");
             if (_largeTraits[i].list > 0) {
@@ -77,6 +96,7 @@ contract Identicons {
             c.largeTraits[uint8(info)].push(_largeTraits[i]);
         }
         for (uint256 i = 0; i < _smallTraits.length; i++) {
+            require(_smallTraits[i].sample < _population, "sample too big");
             info = pb.blocksInfo(_smallTraits[i].hash);
             require(info > 0, "small block not found");
             if (_smallTraits[i].list > 0) {
@@ -89,7 +109,7 @@ contract Identicons {
     }
 
     /**
-    * Pick a base layer (male, female, zombie, ape, etc)
+    * @dev Pick a base layer (male, female, zombie, ape, etc)
     * @param _entropy random value
     * @param _cid config id
     */
@@ -115,6 +135,12 @@ contract Identicons {
         return baseIndex;
     }
 
+    /**
+    * @dev pick a super-rare trait, depending on how many leading zeros _a has
+    * @param _a a random number used for the seed
+    * @param _cid the config id
+    * @return bytes32 hash of the chosen punk block
+    */
     function _pickLeadingZeros(
         uint160 _a,
         uint64 _cid) internal view returns (bytes32) {
@@ -127,11 +153,15 @@ contract Identicons {
         return cfg[_cid].superRare[leadingZeros].hash;
     }
 
+    /**
+    * @dev generates a punk, picking traits using a random seed
+    * @param _a the random seed
+    * @param _cid the config id
+    */
     function generate(
         address _a,
         uint64 _cid) view external returns (string memory) {
-        uint160 a = uint160(_a)+45; // headhones on hat
-
+        uint160 a = uint160(_a)+53;
         bytes32[13] memory picks;
         picks[0] = _pickLeadingZeros(a, _cid);
         if (picks[0] == 0x0) {
@@ -142,7 +172,6 @@ contract Identicons {
         uint256 i = _uniform(a, 13);
         uint256 rolls;
         Trait[][13] storage pool;
-
         if (n > 0) {
             pool = cfg[_cid].largeTraits;
         } else {
@@ -234,11 +263,8 @@ interface IPunkBlocks {
         MouthProp, //11 (Medical Mask, Cigarette, ...)
         Nose       //12 (Clown Nose)
     }
-
     function blocksInfo(bytes32) view external returns(uint256);
-
     function info(bytes32 _id) view external returns(Layer, uint16, uint16);
-
     function svgFromKeys(
         bytes32[] memory _attributeKeys,
         uint16 _x,

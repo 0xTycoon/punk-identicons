@@ -54,11 +54,11 @@ describe("Identicons", function () {
                 {"hash": getKey("Female 2"), "sample": 8000, "list" : 0},
                 {"hash": getKey("Female 3"), "sample": 8000, "list" : 0},
                 {"hash": getKey("Female 4"), "sample": 8000, "list" : 0},
-                {"hash": getKey("Zombie"), "sample": 3000, "list" : 0},
-                {"hash": getKey("Ape"), "sample": 2500, "list" : 0},
-                {"hash": getKey("Alien"), "sample": 500, "list" : 0},
-                {"hash": getKey("Bot"), "sample": 250, "list" : 0},
-                {"hash": getKey("Botina"), "sample": 25, "list" : 0}
+                {"hash": getKey("Zombie"), "sample": 7000, "list" : 0},
+                {"hash": getKey("Ape"), "sample": 6000, "list" : 0},
+                {"hash": getKey("Alien"), "sample": 5000, "list" : 0},
+                {"hash": getKey("Bot"), "sample": 4000, "list" : 0},
+                {"hash": getKey("Botina"), "sample": 3000, "list" : 0}
             ];
             let large = [
                 {"hash": getKey("Rosy Cheeks"), "sample": 50000, "list" : 0},
