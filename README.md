@@ -59,13 +59,10 @@ await id.setConfig(
 
 ### Generate
 
-```javascript
-let punk = await id.generate(owner.address, 0);
-            console.log(punk);
-```
 
 
-## Interface
+
+#### Solidity Interface
 
 ```solidity
 /**
@@ -78,7 +75,20 @@ function generate(
     uint64 _cid) view external returns (string memory);
 ```
 
+#### ethers js
+
+```javascript
+let punk = await id.generate(owner.address, 0);
+            console.log(punk);
+```
+
 ### Address mining estimations
+
+The super-rare faces are decided by the amount of leading zeros in front of
+the random number given. If these were Ethereum addresses, here's how long
+it would take to mine these:
+
+(for a GPU based miner)
 
 2^(4*N) hashes, where n is number of 0
 (2^(4*14) / 350000000) seconds to years

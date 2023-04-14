@@ -3,7 +3,7 @@
 pragma solidity ^0.8.17;
 
 // Uncomment this line to use console.log
-import "hardhat/console.sol";
+//import "hardhat/console.sol";
 
 /**
 
@@ -44,7 +44,7 @@ contract Identicons {
     }
     uint64 public nextConfigId;
     mapping (uint64 => Config) private cfg;
-
+    event NewConfig(uint64);
     constructor() {
     }
 
@@ -105,6 +105,7 @@ contract Identicons {
             c.smallTraits[uint8(info)].push(_smallTraits[i]);
         }
         c.population = _population;
+        emit NewConfig(nextConfigId);
         nextConfigId++;
     }
 
@@ -161,7 +162,7 @@ contract Identicons {
     function generate(
         address _a,
         uint64 _cid) view external returns (string memory) {
-        uint160 a = uint160(_a)+53;
+        uint160 a = uint160(_a);
         bytes32[13] memory picks;
         picks[0] = _pickLeadingZeros(a, _cid);
         if (picks[0] == 0x0) {
@@ -179,7 +180,6 @@ contract Identicons {
         }
         uint256 j;
         while (true) {
-            console.log("i:", i, "len:",  pool[i].length);
             // if layer has traits to pick and no trait been picked yet
             // then pick a trait and roll it.
             if (pool[i].length > 0 && picks[i] == 0x0) {
@@ -212,7 +212,6 @@ contract Identicons {
                 i=0;
             }
         }
-        console.log("done");
         bytes32[] memory traits;
         j=0;
         for (i = 0; i < picks.length; i++) {
@@ -225,7 +224,6 @@ contract Identicons {
                 j++;
             }
         }
-        console.log("leb:", traits.length);
         string memory ret = pb.svgFromKeys(traits, 0,0, 240, 0);
         return ret;
     }
