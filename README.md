@@ -4,6 +4,80 @@ Punk identicons allow you to generate punks based on a random number.
 
 Built on Punk-blocks, this contract implements a punk-picking function.
 
+## Why?
+
+...
+
+## Configuration
+
+Use the `setConfig` to set a new configuration.
+
+Example using ethers js.
+
+The following example adds two super-rare faces, needing 7 or 8 leading zeros, 2 regular bases to choose from, 4 large traits to choose from, and 4 small trairs to chose from.
+
+```javascript
+
+let getKey = function (s) {
+    return ethers.utils.keccak256(ethers.utils.hexlify(ethers.utils.toUtf8Bytes((s))));
+}
+
+let srare = [
+    //
+    {"hash": getKey("Killer Bot"), "sample": 7, "list" : 0},
+    {"hash": getKey("Killer Botina"), "sample": 8, "list" : 0}
+];
+
+
+let base = [
+    {"hash": getKey("Male 1"), "sample": 8000, "list" : 0},
+    {"hash": getKey("Male 2"), "sample": 8000, "list" : 0}
+];
+
+let large = [
+    {"hash": getKey("Rosy Cheeks"), "sample": 50000, "list" : 0},
+    {"hash": getKey("Luxurious Beard"), "sample": 2860, "list" : 0},
+    {"hash": getKey("Clown Hair Green"), "sample": 1480, "list" : 0},
+    {"hash": getKey("Mohawk Dark"), "sample": 4290, "list" : 9}
+];
+
+let small = [
+    {"hash": getKey("Pilot Helmet"), "sample": 540, "list" : 0},
+    {"hash": getKey("Tassle Hat"), "sample": 1780, "list" : 0},
+    {"hash": getKey("Hot Lipstick"), "sample": 33333, "list" : 0},
+    {"hash": getKey("Blue Eye Shadow"), "sample": 2660, "list" : 0}];
+
+await id.setConfig(
+    srare,
+    base,
+    large,
+    small,
+    100000
+);
+
+```
+
+### Generate
+
+```javascript
+let punk = await id.generate(owner.address, 0);
+            console.log(punk);
+```
+
+
+## Interface
+
+```solidity
+/**
+* @dev generates a punk, picking traits using a random seed
+* @param _a the random seed
+* @param _cid the config id
+*/
+function generate(
+    address _a,
+    uint64 _cid) view external returns (string memory);
+```
+
 ### Address mining estimations
 
 2^(4*N) hashes, where n is number of 0
