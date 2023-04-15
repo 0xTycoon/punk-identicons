@@ -33,7 +33,7 @@ contract Identicons {
     struct Trait {
         bytes32 hash;   // The hash of the name
         uint128 sample; // count of occurrences in a population
-        uint128 list;   //
+        uint128 list;   // which group (will use the block's default layer if list is 0)
     }
     struct Config {
         Trait[18] superRare;     // Rare base traits. Like a mapping, leadingZeros => Trait.
@@ -146,7 +146,7 @@ contract Identicons {
         uint160 _a,
         uint64 _cid) internal view returns (bytes32) {
         uint16 leadingZeros;
-        uint offset = 4; // each hex char is 4 bytes
+        uint offset = 4;                  // each hex char is 4 bytes
         while (_a >> 160 - offset == 0) { // count leading 0's
             leadingZeros++;
             offset+=4;
@@ -183,7 +183,7 @@ contract Identicons {
             // if layer has traits to pick and no trait been picked yet
             // then pick a trait and roll it.
             if (pool[i].length > 0 && picks[i] == 0x0) {
-                j = _uniform(a, pool[i].length); // roll a dice to choose starting pos
+                j = _uniform(a, pool[i].length);           // roll a dice to choose starting pos
                 uint256 count = 0;
                 while (true) {
                     if (count==pool[i].length) {
@@ -229,9 +229,9 @@ contract Identicons {
     }
 
     /**
-* Generate a uniform random number between 0 - _upperBound
-* See https://medium.com/hownetworks/dont-waste-cycles-with-modulo-bias-35b6fdafcf94
-*/
+    * Generate a uniform random number between 0 - _upperBound
+    * See https://medium.com/hownetworks/dont-waste-cycles-with-modulo-bias-35b6fdafcf94
+    */
     function _uniform(uint256 _entropy, uint256 _upperBound) internal pure returns (uint256) {
         uint256 negate = type(uint256).max - _upperBound + 1; // negate 2's compliment
         uint256 min = negate % _upperBound;

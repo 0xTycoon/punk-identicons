@@ -4,9 +4,31 @@ Punk identicons allow you to generate punks based on a random number.
 
 Built on Punk-blocks, this contract implements a punk-picking function.
 
+The generator contract is deployed to:
+
+Punk identicons are returned as SVG images.
+
+Bonus feature: rare faces depending on the amount of leading zeros in the 160-bit random number.
+
 ## Why?
 
-...
+
+
+Use randomly generated punks from your wallet address to automatically identify each account. The screenshot is a mockup to show what I mean... Which one is better?
+
+Before:
+
+![Before](mm-example.png)
+
+After:
+
+![After](mm-example-new.png)
+
+### Limitations
+
+The generator does not check for duplicates. To reduce the possibility
+of duplicates, add more traits and spread the probabilities of the traits
+evenly. The function that calls the generator can also check for duplicates.
 
 ## Configuration
 
@@ -56,6 +78,10 @@ await id.setConfig(
 );
 
 ```
+
+### Adding new traits
+
+You can add new traits by using [Punk Blocks](https://github.com/0xTycoon/punk-blocks)
 
 ### Generate
 
