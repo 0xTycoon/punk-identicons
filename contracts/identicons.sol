@@ -48,7 +48,7 @@ contract Identicons {
     constructor() {
     }
 
-    function config(uint64 c) public returns (Config memory) {
+    function config(uint64 c) view public returns (Config memory) {
         return cfg[c];
     }
 
