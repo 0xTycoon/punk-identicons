@@ -1,5 +1,6 @@
 const {expect} = require("chai");
 const {ContractFactory, utils, BigNumber} = require('ethers');
+const crypto = require("crypto");
 
 let owner, simp, elizabeth;
 
@@ -63,9 +64,9 @@ describe("Identicons", function () {
             let large = [
                 {"hash": getKey("Rosy Cheeks"), "sample": 50000, "list" : 0},
                 {"hash": getKey("Luxurious Beard"), "sample": 2860, "list" : 0},
-                {"hash": getKey("Clown Hair Green"), "sample": 1480, "list" : 0},
+                {"hash": getKey("Clown Hair Green"), "sample": 8333, "list" : 0},
                 {"hash": getKey("Mohawk Dark"), "sample": 4290, "list" : 9},
-                {"hash": getKey("Cowboy Hat"), "sample": 1420, "list" : 9},
+                {"hash": getKey("Cowboy Hat"), "sample": 2500, "list" : 9},
                 {"hash": getKey("Mustache"), "sample": 2880, "list" : 0},
                 {"hash": getKey("Clown Nose"), "sample": 5000, "list" : 0},
                 {"hash": getKey("Cigarette"), "sample": 9610, "list" : 0},
@@ -75,54 +76,54 @@ describe("Identicons", function () {
                 {"hash": getKey("Shadow Beard"), "sample": 5260, "list" : 0},
                 {"hash": getKey("Frown"), "sample": 33333, "list" : 0},
                 {"hash": getKey("Cap Forward"), "sample": 2540, "list" : 9},
-                {"hash": getKey("Goat"), "sample": 2950, "list" : 0},
+                {"hash": getKey("Goat"), "sample": 15000, "list" : 0},
                 {"hash": getKey("Mole"), "sample": 50000, "list" : 0},
-                {"hash": getKey("Purple Hair"), "sample": 1650, "list" : 0},
+                {"hash": getKey("Purple Hair"), "sample": 8333, "list" : 0}, // h
                 {"hash": getKey("Small Shades"), "sample": 3780, "list" : 0},
-                {"hash": getKey("Shaved Head"), "sample": 3000, "list" : 0},
+                {"hash": getKey("Shaved Head"), "sample": 8333, "list" : 0}, //h
                 {"hash": getKey("Classic Shades"), "sample": 5020, "list" : 0},
                 {"hash": getKey("Vape"), "sample": 2720, "list" : 0},
                 {"hash": getKey("Silver Chain"), "sample": 50000, "list" : 0},
                 {"hash": getKey("Smile"), "sample": 33333, "list" : 0},
                 {"hash": getKey("Big Shades"), "sample": 5350, "list" : 0},
                 {"hash": getKey("Mohawk Thin"), "sample": 4410, "list" : 9},
-                {"hash": getKey("Beanie"), "sample": 440, "list" : 9},
+                {"hash": getKey("Beanie"), "sample": 4400, "list" : 9},
                 {"hash": getKey("Cap"), "sample": 3510, "list" : 9},
-                {"hash": getKey("Clown Eyes Green"), "sample": 3820, "list" : 0},
+                {"hash": getKey("Clown Eyes Green"), "sample": 25000, "list" : 0},
                 {"hash": getKey("Normal Beard Black"), "sample": 2890, "list" : 0},
                 {"hash": getKey("Medical Mask"), "sample": 1750, "list" : 0},
                 {"hash": getKey("Normal Beard"), "sample": 2890, "list" : 0},
                 {"hash": getKey("VR"), "sample": 3320, "list" : 0},
                 {"hash": getKey("Eye Patch"), "sample": 4610, "list" : 0},
-                {"hash": getKey("Wild Hair"), "sample": 4470, "list" : 0},
+                {"hash": getKey("Wild Hair"), "sample": 8333, "list" : 0}, // h
                 {"hash": getKey("Top Hat"), "sample": 1150, "list" : 9},
-                {"hash": getKey("Bandana"), "sample": 4810, "list" : 0},
-                {"hash": getKey("Handlebars"), "sample": 2630, "list" : 0},
-                {"hash": getKey("Frumpy Hair"), "sample": 4420, "list" : 0},
-                {"hash": getKey("Crazy Hair"), "sample": 4140, "list" : 0},
-                {"hash": getKey("Police Cap"), "sample": 2030, "list" : 0},
+                {"hash": getKey("Bandana"), "sample": 8333, "list" : 0}, // h
+                {"hash": getKey("Handlebars"), "sample": 8888, "list" : 0},
+                {"hash": getKey("Frumpy Hair"), "sample": 8333, "list" : 0}, // h
+                {"hash": getKey("Crazy Hair"), "sample": 8333, "list" : 0}, // h
+                {"hash": getKey("Police Cap"), "sample": 2030, "list" : 9},
                 {"hash": getKey("Buck Teeth"), "sample": 33333, "list" : 0},
-                {"hash": getKey("Do-rag"), "sample": 3000, "list" : 0},
+                {"hash": getKey("Do-rag"), "sample": 8333, "list" : 0},
                 {"hash": getKey("Front Beard"), "sample": 2730, "list" : 0},
-                {"hash": getKey("Spots"), "sample": 10000, "list" : 0},
+                {"hash": getKey("Spots"), "sample": 20000, "list" : 0},
                 {"hash": getKey("Big Beard"), "sample": 1460, "list" : 0},
-                {"hash": getKey("Vampire Hair"), "sample": 1470, "list" : 0},
-                {"hash": getKey("Peak Spike"), "sample": 3030, "list" : 0},
-                {"hash": getKey("Chinstrap"), "sample": 2820, "list" : 0},
+                {"hash": getKey("Vampire Hair"), "sample": 8333, "list" : 0}, // h
+                {"hash": getKey("Peak Spike"), "sample": 8333, "list" : 0}, // h
+                {"hash": getKey("Chinstrap"), "sample": 15000, "list" : 0},
                 {"hash": getKey("Fedora"), "sample": 1860, "list" : 9},
                 {"hash": getKey("Earring"), "sample": 50000, "list" : 0},
                 {"hash": getKey("Horned Rim Glasses"), "sample": 5350, "list" : 0},
-                {"hash": getKey("Headband"), "sample": 4060, "list" : 9},
+                {"hash": getKey("Headband"), "sample": 8333, "list" : 9}, // h
                 {"hash": getKey("Pipe"), "sample": 3170, "list" : 0},
-                {"hash": getKey("Messy Hair"), "sample": 4600, "list" : 0},
+                {"hash": getKey("Messy Hair"), "sample": 8333, "list" : 0}, // h
                 {"hash": getKey("Front Beard Dark"), "sample": 2600, "list" : 0},
-                {"hash": getKey("Hoodie"), "sample": 2590, "list" : 0},
+                {"hash": getKey("Hoodie"), "sample": 8333, "list" : 0}, // h
                 {"hash": getKey("Gold Chain"), "sample": 50000, "list" : 0},
-                {"hash": getKey("Muttonchops"), "sample": 3030, "list" : 0},
-                {"hash": getKey("Stringy Hair"), "sample": 4630, "list" : 0},
+                {"hash": getKey("Muttonchops"), "sample": 15000, "list" : 0},
+                {"hash": getKey("Stringy Hair"), "sample": 8333, "list" : 0}, // h
                 {"hash": getKey("Eye Mask"), "sample": 2930, "list" : 0},
-                {"hash": getKey("3D Glasses"), "sample": 2860, "list" : 0},
-                {"hash": getKey("Clown Eyes Blue"), "sample": 3840, "list" : 0},
+                {"hash": getKey("3D Glasses"), "sample": 15000, "list" : 0},
+                {"hash": getKey("Clown Eyes Blue"), "sample": 25000, "list" : 0},
                 {"hash": getKey("Mohawk"), "sample": 4410, "list" : 9},
                 {"hash": getKey("Stogie"), "sample": 50000, "list" : 0},
                 {"hash": getKey("Earphone"), "sample": 30000, "list" : 0},
@@ -133,70 +134,70 @@ describe("Identicons", function () {
                 {"hash": getKey("Gas Mask"), "sample": 15000, "list" : 0},
                 {"hash": getKey("Goggles"), "sample": 33333, "list" : 0},
                 {"hash": getKey("Pen"), "sample": 8000, "list" : 0},
-                {"hash": getKey("Pencil"), "sample": 7000, "list" : 0},
+                {"hash": getKey("Pencil"), "sample": 25000, "list" : 0},
                 {"hash": getKey("Red Hat"), "sample": 25000, "list" : 9},
                 {"hash": getKey("Yellow Hat"), "sample": 25000, "list" : 9},
                 {"hash": getKey("White Hat"), "sample": 25000, "list" : 9},
-                {"hash": getKey("Suit"), "sample": 3000, "list" : 0},
-                {"hash": getKey("Suit Black"), "sample": 1000, "list" : 0}
+                {"hash": getKey("Suit"), "sample": 15000, "list" : 0},
+                {"hash": getKey("Suit Black"), "sample": 10000, "list" : 0}
 
             ];
             let small = [
-                {"hash": getKey("Pilot Helmet"), "sample": 540, "list" : 0},
+                {"hash": getKey("Pilot Helmet"), "sample": 5400, "list" : 0},
                 {"hash": getKey("Tassle Hat"), "sample": 1780, "list" : 0},
                 {"hash": getKey("Hot Lipstick"), "sample": 33333, "list" : 0},
-                {"hash": getKey("Blue Eye Shadow"), "sample": 2660, "list" : 0},
-                {"hash": getKey("Straight Hair Dark"), "sample": 1480, "list" : 0},
+                {"hash": getKey("Blue Eye Shadow"), "sample": 25000, "list" : 0},
+                {"hash": getKey("Straight Hair Dark"), "sample": 5000, "list" : 0},
                 {"hash": getKey("Choker"), "sample": 50000, "list" : 0},
-                {"hash": getKey("Crazy Hair"), "sample": 4140, "list" : 0},
+                {"hash": getKey("Crazy Hair"), "sample": 5000, "list" : 0},
                 {"hash": getKey("Regular Shades"), "sample": 5270, "list" : 0},
-                {"hash": getKey("Wild Blonde"), "sample": 1440, "list" : 0},
-                {"hash": getKey("3D Glasses"), "sample": 2860, "list" : 0},
+                {"hash": getKey("Wild Blonde"), "sample": 5000, "list" : 0},
+                {"hash": getKey("3D Glasses"), "sample": 15000, "list" : 0},
                 {"hash": getKey("Mole"), "sample": 50000, "list" : 0},
-                {"hash": getKey("Wild White Hair"), "sample": 1360, "list" : 0},
+                {"hash": getKey("Wild White Hair"), "sample": 5000, "list" : 0},
                 {"hash": getKey("Spots"), "sample": 50000, "list" : 0},
-                {"hash": getKey("Frumpy Hair"), "sample": 4420, "list" : 0},
+                {"hash": getKey("Frumpy Hair"), "sample": 5000, "list" : 0},
                 {"hash": getKey("Nerd Glasses"), "sample": 5720, "list" : 0},
-                {"hash": getKey("Tiara"), "sample": 550, "list" : 0},
-                {"hash": getKey("Orange Side"), "sample": 680, "list" : 0},
+                {"hash": getKey("Tiara"), "sample": 5500, "list" : 0},
+                {"hash": getKey("Orange Side"), "sample": 5000, "list" : 0},
                 {"hash": getKey("Red Mohawk"), "sample": 1470, "list" : 9},
-                {"hash": getKey("Messy Hair"), "sample": 4600, "list" : 0},
-                {"hash": getKey("Clown Eyes Blue"), "sample": 3840, "list" : 0},
+                {"hash": getKey("Messy Hair"), "sample": 5000, "list" : 0},
+                {"hash": getKey("Clown Eyes Blue"), "sample": 25000, "list" : 0},
                 {"hash": getKey("Pipe"), "sample": 3170, "list" : 0},
-                {"hash": getKey("Wild Hair"), "sample": 4470, "list" : 0},
-                {"hash": getKey("Purple Eye Shadow"), "sample": 2620, "list" : 0},
-                {"hash": getKey("Stringy Hair"), "sample": 4630, "list" : 0},
-                {"hash": getKey("Dark Hair"), "sample": 1570, "list" : 0},
+                {"hash": getKey("Wild Hair"), "sample": 5000, "list" : 0},
+                {"hash": getKey("Purple Eye Shadow"), "sample": 25000, "list" : 0},
+                {"hash": getKey("Stringy Hair"), "sample": 5000, "list" : 0},
+                {"hash": getKey("Dark Hair"), "sample": 5000, "list" : 0},
                 {"hash": getKey("Eye Patch"), "sample": 4610, "list" : 0},
-                {"hash": getKey("Blonde Short"), "sample": 1290, "list" : 0},
+                {"hash": getKey("Blonde Short"), "sample": 5000, "list" : 0},
                 {"hash": getKey("Classic Shades"), "sample": 9000, "list" : 0},
                 {"hash": getKey("Eye Mask"), "sample": 9000, "list" : 0},
-                {"hash": getKey("Clown Hair Green"), "sample": 1480, "list" : 0},
+                {"hash": getKey("Clown Hair Green"), "sample": 5000, "list" : 0},
                 {"hash": getKey("Cap"), "sample": 3510, "list" : 9},
                 {"hash": getKey("Medical Mask"), "sample": 1750, "list" : 0},
                 {"hash": getKey("Bandana"), "sample": 4810, "list" : 0},
                 {"hash": getKey("Purple Lipstick"), "sample": 33333, "list" : 0},
                 {"hash": getKey("Clown Nose"), "sample": 5000, "list" : 0},
-                {"hash": getKey("Headband"), "sample": 4060, "list" : 0},
-                {"hash": getKey("Pigtails"), "sample": 940, "list" : 0},
-                {"hash": getKey("Straight Hair Blonde"), "sample": 1440, "list" : 0},
+                {"hash": getKey("Headband"), "sample": 5000, "list" : 0},
+                {"hash": getKey("Pigtails"), "sample": 5000, "list" : 0},
+                {"hash": getKey("Straight Hair Blonde"), "sample": 5000, "list" : 0},
                 {"hash": getKey("Knitted Cap"), "sample": 4190, "list" : 9},
-                {"hash": getKey("Clown Eyes Green"), "sample": 3820, "list" : 0},
+                {"hash": getKey("Clown Eyes Green"), "sample": 25000, "list" : 0},
                 {"hash": getKey("Cigarette"), "sample": 9610, "list" : 0},
-                {"hash": getKey("Welding Goggles"), "sample": 860, "list" : 0},
+                {"hash": getKey("Welding Goggles"), "sample": 5000, "list" : 0},
                 {"hash": getKey("Mohawk Thin"), "sample": 4410, "list" : 9},
                 {"hash": getKey("Gold Chain"), "sample": 50000, "list" : 0},
                 {"hash": getKey("VR"), "sample": 3320, "list" : 0},
                 {"hash": getKey("Vape"), "sample": 2720, "list" : 0},
-                {"hash": getKey("Pink With Hat"), "sample": 950, "list" : 0},
-                {"hash": getKey("Blonde Bob"), "sample": 1470, "list" : 0},
+                {"hash": getKey("Pink With Hat"), "sample": 5000, "list" : 0},
+                {"hash": getKey("Blonde Bob"), "sample": 5000, "list" : 0},
                 {"hash": getKey("Mohawk"), "sample": 4410, "list" : 9},
                 {"hash": getKey("Big Shades"), "sample": 5350, "list" : 0},
                 {"hash": getKey("Earring"), "sample": 50000, "list" : 0},
-                {"hash": getKey("Green Eye Shadow"), "sample": 2710, "list" : 0},
-                {"hash": getKey("Straight Hair"), "sample": 1510, "list" : 0},
+                {"hash": getKey("Green Eye Shadow"), "sample": 25000, "list" : 0},
+                {"hash": getKey("Straight Hair"), "sample": 5000, "list" : 0}, // h
                 {"hash": getKey("Rosy Cheeks"), "sample": 50000, "list" : 0},
-                {"hash": getKey("Half Shaved"), "sample": 1470, "list" : 0},
+                {"hash": getKey("Half Shaved"), "sample": 5000, "list" : 0}, // h
                 {"hash": getKey("Mohawk Dark"), "sample": 4290, "list" : 9},
                 {"hash": getKey("Black Lipstick"), "sample": 33333, "list" : 0},
                 {"hash": getKey("Horned Rim Glasses"), "sample": 5350, "list" : 0},
@@ -210,12 +211,12 @@ describe("Identicons", function () {
                 {"hash": getKey("Gas Mask"), "sample": 15000, "list" : 0},
                 {"hash": getKey("Goggles"), "sample": 33333, "list" : 0},
                 {"hash": getKey("Pen"), "sample": 8000, "list" : 0},
-                {"hash": getKey("Pencil"), "sample": 7000, "list" : 0},
+                {"hash": getKey("Pencil"), "sample": 25000, "list" : 0},
                 {"hash": getKey("Red Hat"), "sample": 25000, "list" : 9},
                 {"hash": getKey("Yellow Hat"), "sample": 25000, "list" : 9},
                 {"hash": getKey("White Hat"), "sample": 25000, "list" : 9},
-                {"hash": getKey("Suit"), "sample": 3000, "list" : 0},
-                {"hash": getKey("Suit Black"), "sample": 1000, "list" : 0}
+                {"hash": getKey("Suit"), "sample": 15000, "list" : 0},
+                {"hash": getKey("Suit Black"), "sample": 10000, "list" : 0}
 
 
             ];
@@ -227,14 +228,63 @@ describe("Identicons", function () {
                 small,
                 100000
             );
-
             let punk = await id.generate(owner.address, 0);
             console.log(punk);
 
         });
 
+        const fs = require('fs');
+        //0xf39Fd6e51aad88F6F4ce6aB8827279cffFb922661
+        it("generate some punks", async function () {
 
-    })
+            var crypto = require("crypto");
+
+            let getKey = function (s) {
+                return ethers.utils.keccak256(ethers.utils.hexlify(ethers.utils.toUtf8Bytes((s))))
+            }
+
+            let all = {};
+
+           // return;
+            for (let i =0; i<10000; i++) {
+                let key = crypto.randomBytes(20).toString('hex');
+
+                //let key = ethers.utils.keccak256(owner.address+i+"").substring(0,42);
+                //console.log(key);
+                //console.log(owner.address);
+                let punk = await id.generate(key, 0);
+                //console.log(punk);
+
+                let testing = getKey(punk);
+
+                if (all.hasOwnProperty(testing)) {
+                    console.log("DUPLICATE! "+i);
+                }
+
+                all[testing] = true;
+
+                fs.writeFile('./punk'+i+'.svg', punk, err => {
+                    if (err) {
+                        console.error(err);
+                    }
+                    // file written successfully
+                });
+
+                const sleep = time => new Promise(res => setTimeout(res, time, "done sleeping"));
+
+// using native promises
+                sleep(200).then(msg => true);
+
+            }
+            //console.log(all)
+
+
+
+
+        });
+
+
+    });
 
 
 });
