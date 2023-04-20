@@ -1,6 +1,7 @@
 // SPDX-License-Identifier: MiT
 // Author: tycoon.eth
-pragma solidity ^0.8.17;
+// v0.0.1
+pragma solidity ^0.8.19;
 
 // Uncomment this line to use console.log
 //import "hardhat/console.sol";
@@ -75,19 +76,19 @@ contract Identicons {
         uint256 info;
         Config storage c = cfg[nextConfigId];
         for (uint256 i = 0; i < _superRare.length; i++) {
-            require(_superRare[i].sample < _population, "sample too big");
+            require(_superRare[i].sample <= _population, "sample too big");
             info = pb.blocksInfo(_superRare[i].hash);
             require(info > 0, "superare block not found");
             c.superRare[_superRare[i].sample] = _superRare[i]; // key by sample (leading zeros)
         }
         for (uint256 i = 0; i < _baseTraits.length; i++) {
-            require(_baseTraits[i].sample < _population, "sample too big");
+            require(_baseTraits[i].sample <= _population, "sample too big");
             info = pb.blocksInfo(_baseTraits[i].hash);
             require(info > 0, "base block not found");
             c.baseTraits.push(_baseTraits[i]);
         }
         for (uint256 i = 0; i < _largeTraits.length; i++) {
-            require(_largeTraits[i].sample < _population, "sample too big");
+            require(_largeTraits[i].sample <= _population, "sample too big");
             info = pb.blocksInfo(_largeTraits[i].hash);
             require(info > 0, "large block not found");
             if (_largeTraits[i].list > 0) {
@@ -96,7 +97,7 @@ contract Identicons {
             c.largeTraits[uint8(info)].push(_largeTraits[i]);
         }
         for (uint256 i = 0; i < _smallTraits.length; i++) {
-            require(_smallTraits[i].sample < _population, "sample too big");
+            require(_smallTraits[i].sample <= _population, "sample too big");
             info = pb.blocksInfo(_smallTraits[i].hash);
             require(info > 0, "small block not found");
             if (_smallTraits[i].list > 0) {
@@ -158,10 +159,34 @@ contract Identicons {
     * @dev generates a punk, picking traits using a random seed
     * @param _a the random seed
     * @param _cid the config id
+    * @return string of the punk svg generated
     */
     function generate(
         address _a,
-        uint64 _cid) view external returns (string memory) {
+        uint64 _cid,
+        uint16 _x,
+        uint16 _y,
+        uint16 _size
+    ) view external returns (string memory) {
+        bytes32[] memory traits = _generate(_a, _cid);
+        string memory ret = pb.svgFromKeys(traits, _x, _y, _size, 0);
+        return ret;
+    }
+
+    /**
+    * @dev picks a punk, picking traits using a random seed, returning the
+    *   hashes of the seeds.
+    * @param _a the random seed
+    * @param _cid the config id
+    * @return bytes32[] representing the punk-block hashes.
+    */
+    function pick(
+        address _a,
+        uint64 _cid) view external returns (bytes32[] memory) {
+        return _generate(_a, _cid);
+    }
+
+    function _generate(address _a, uint64 _cid) view internal returns (bytes32[] memory) {
         uint160 a = uint160(_a);
         bytes32[13] memory picks;
         picks[0] = _pickLeadingZeros(a, _cid);
@@ -179,6 +204,7 @@ contract Identicons {
             pool = cfg[_cid].smallTraits;
         }
         uint256 j;
+
         while (true) {
             // if layer has traits to pick and no trait been picked yet
             // then pick a trait and roll it.
@@ -196,18 +222,20 @@ contract Identicons {
                         picks[i] = rolled.hash;
                         break;
                     }
-                    j++;
-                    count++;
+                    unchecked {
+                        j++;
+                        count++;
+                    }
                     if (j ==  pool[i].length) {
                         j = 0;
                     }
                 }
             }
-            rolls++;
+            unchecked {rolls++;}
             if (rolls > 13) {
                 break;
             }
-            i++;
+            unchecked{i++;}
             if (i >= pool.length) {
                 i=0;
             }
@@ -221,27 +249,28 @@ contract Identicons {
                     mstore (0x40, add(mload(0x40), 0x20))  // move free memory ptr
                 }
                 traits[j] = picks[i];
-                j++;
+                unchecked{j++;}
             }
         }
-        string memory ret = pb.svgFromKeys(traits, 0,0, 240, 0);
-        return ret;
+        return traits;
     }
 
     /**
     * Generate a uniform random number between 0 - _upperBound
     * See https://medium.com/hownetworks/dont-waste-cycles-with-modulo-bias-35b6fdafcf94
     */
-    function _uniform(uint256 _entropy, uint256 _upperBound) internal pure returns (uint256) {
-        uint256 negate = type(uint256).max - _upperBound + 1; // negate 2's compliment
-        uint256 min = negate % _upperBound;
-        while (true) {
-            if (_entropy >= min) {
-                break;
+    function _uniform(uint256 _entropy, uint256 _upperBound) internal view returns (uint256) {
+        unchecked {
+            uint256 negate = type(uint256).max - _upperBound + 1; // negate 2's compliment
+            uint256 min = negate % _upperBound;
+            while (true) {
+                if (_entropy >= min) {
+                    break;
+                }
+                _entropy = uint256(keccak256(abi.encodePacked(_entropy)));
             }
-            _entropy = uint256(keccak256(abi.encodePacked(_entropy)));
+            return _entropy % _upperBound;
         }
-        return _entropy % _upperBound;
     }
 }
 
