@@ -204,7 +204,6 @@ contract Identicons {
             pool = cfg[_cid].smallTraits;
         }
         uint256 j;
-
         while (true) {
             // if layer has traits to pick and no trait been picked yet
             // then pick a trait and roll it.

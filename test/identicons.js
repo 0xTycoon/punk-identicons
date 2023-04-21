@@ -261,11 +261,7 @@ describe("Identicons", function () {
            // return;
             for (let i =0; i<10000; i++) {
                 let key = crypto.randomBytes(20).toString('hex');
-
-                //let key = ethers.utils.keccak256(owner.address+i+"").substring(0,42);
-                //console.log(key);
-                //console.log(owner.address);
-                let punk = await id.generate(key, 0, 0, 240, 0);
+                let punk = await id.generate(key, 0, 0, 0, 240);
                 //console.log(punk);
 
                 let testing = getKey(punk);
@@ -290,9 +286,6 @@ describe("Identicons", function () {
 
             }
             //console.log(all)
-
-
-
 
         });
 

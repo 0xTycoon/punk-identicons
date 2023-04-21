@@ -6,6 +6,8 @@ Built on Punk-blocks, this contract implements a punk-picking function.
 
 The generator contract is deployed to: [0x69058dc511d5dd3117ebfaa08036b698d5cb2707](https://etherscan.io/address/0x69058dc511d5dd3117ebfaa08036b698d5cb2707#code)
 
+TODO: Redeploy v0.0.1 and initialize.
+
 Punk identicons are returned as SVG images.
 
 Bonus feature: rare faces depending on the amount of leading zeros in the 160-bit random number.
