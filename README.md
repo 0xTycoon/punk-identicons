@@ -4,7 +4,7 @@ Punk identicons allow you to generate punks based on a random number.
 
 Built on Punk-blocks, this contract implements a punk-picking function.
 
-The generator contract is deployed to: [0x69058dc511d5dd3117ebfaa08036b698d5cb2707](https://etherscan.io/address/0x69058dc511d5dd3117ebfaa08036b698d5cb2707#code)
+The generator contract is deployed to: [0xc55C7913BE9E9748FF10a4A7af86A5Af25C46047](https://etherscan.io/address/0xc55C7913BE9E9748FF10a4A7af86A5Af25C46047#code)
 
 TODO: Redeploy v0.0.1 and initialize.
 
