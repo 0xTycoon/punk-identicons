@@ -19,7 +19,7 @@
 <body>
 
 <h1>Generate a random identicon</h1>
-<h3 class="mono">function generate(address _a, uint64 _cid) view external returns (string memory);</h3>
+<h3 class="mono">function generate(address _a, uint64 _cid, uint16 _x, uint16 _y, uint16 _size) view external returns (string memory);</h3>
 
 <form>
     <label>
@@ -33,64 +33,59 @@
 </form>
 <div id="svgIdenticons-result"></div>
 
-<input type="button" value="Init"  id="init-button"></input>
+<input style="display: none" type="button" value="Init"  id="init-button"
 
 <hr>
 <a href="https://github.com/0xTycoon/punk-identicons">Get me back to home</a>
 
 </body>
 <script>
-    let provider, signer, id, init;
+    let provider, signer, id, init, generate;
 </script>
 <script type="module">
     import {ethers, keccak256, hexlify, toUtf8Bytes} from "./js/ethers-6.1.min.js";
     //console.log(keccak256("moo"))
     async function run() {
-
         if (window.ethereum == null) {
-
-            // If MetaMask is not installed, we use the default provider,
-            // which is backed by a variety of third-party services (such
-            // as INFURA). They do not have private keys installed so are
-            // only have read-only access
             console.log("MetaMask not installed; using read-only defaults")
             provider = ethers.getDefaultProvider();
-
         } else {
-
-            // Connect to the MetaMask EIP-1193 object. This is a standard
-            // protocol that allows Ethers access to make all read-only
-            // requests through MetaMask.
             provider = new ethers.BrowserProvider(window.ethereum)
-
-            // It also provides an opportunity to request access to write
-            // operations, which will be performed by the private key
-            // that MetaMask manages for the user.
             signer = await provider.getSigner();
         }
-
-
-
-        console.log(signer);
-        console.log("hi");
-
         console.log(await provider.getBlockNumber());
-
 
         const identiconsAddress = "0xc55C7913BE9E9748FF10a4A7af86A5Af25C46047";
 
         const abi = [{"inputs":[],"stateMutability":"nonpayable","type":"constructor"},{"anonymous":false,"inputs":[{"indexed":false,"internalType":"uint64","name":"","type":"uint64"}],"name":"NewConfig","type":"event"},{"inputs":[{"internalType":"uint64","name":"c","type":"uint64"}],"name":"config","outputs":[{"components":[{"components":[{"internalType":"bytes32","name":"hash","type":"bytes32"},{"internalType":"uint128","name":"sample","type":"uint128"},{"internalType":"uint128","name":"list","type":"uint128"}],"internalType":"struct Identicons.Trait[18]","name":"superRare","type":"tuple[18]"},{"components":[{"internalType":"bytes32","name":"hash","type":"bytes32"},{"internalType":"uint128","name":"sample","type":"uint128"},{"internalType":"uint128","name":"list","type":"uint128"}],"internalType":"struct Identicons.Trait[]","name":"baseTraits","type":"tuple[]"},{"components":[{"internalType":"bytes32","name":"hash","type":"bytes32"},{"internalType":"uint128","name":"sample","type":"uint128"},{"internalType":"uint128","name":"list","type":"uint128"}],"internalType":"struct Identicons.Trait[][13]","name":"largeTraits","type":"tuple[][13]"},{"components":[{"internalType":"bytes32","name":"hash","type":"bytes32"},{"internalType":"uint128","name":"sample","type":"uint128"},{"internalType":"uint128","name":"list","type":"uint128"}],"internalType":"struct Identicons.Trait[][13]","name":"smallTraits","type":"tuple[][13]"},{"internalType":"uint256","name":"population","type":"uint256"}],"internalType":"struct Identicons.Config","name":"","type":"tuple"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"_a","type":"address"},{"internalType":"uint64","name":"_cid","type":"uint64"},{"internalType":"uint16","name":"_x","type":"uint16"},{"internalType":"uint16","name":"_y","type":"uint16"},{"internalType":"uint16","name":"_size","type":"uint16"}],"name":"generate","outputs":[{"internalType":"string","name":"","type":"string"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"nextConfigId","outputs":[{"internalType":"uint64","name":"","type":"uint64"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"_a","type":"address"},{"internalType":"uint64","name":"_cid","type":"uint64"}],"name":"pick","outputs":[{"internalType":"bytes32[]","name":"","type":"bytes32[]"}],"stateMutability":"view","type":"function"},{"inputs":[{"components":[{"internalType":"bytes32","name":"hash","type":"bytes32"},{"internalType":"uint128","name":"sample","type":"uint128"},{"internalType":"uint128","name":"list","type":"uint128"}],"internalType":"struct Identicons.Trait[]","name":"_superRare","type":"tuple[]"},{"components":[{"internalType":"bytes32","name":"hash","type":"bytes32"},{"internalType":"uint128","name":"sample","type":"uint128"},{"internalType":"uint128","name":"list","type":"uint128"}],"internalType":"struct Identicons.Trait[]","name":"_baseTraits","type":"tuple[]"},{"components":[{"internalType":"bytes32","name":"hash","type":"bytes32"},{"internalType":"uint128","name":"sample","type":"uint128"},{"internalType":"uint128","name":"list","type":"uint128"}],"internalType":"struct Identicons.Trait[]","name":"_largeTraits","type":"tuple[]"},{"components":[{"internalType":"bytes32","name":"hash","type":"bytes32"},{"internalType":"uint128","name":"sample","type":"uint128"},{"internalType":"uint128","name":"list","type":"uint128"}],"internalType":"struct Identicons.Trait[]","name":"_smallTraits","type":"tuple[]"},{"internalType":"uint256","name":"_population","type":"uint256"}],"name":"setConfig","outputs":[],"stateMutability":"nonpayable","type":"function"}];
 
-// The Contract object
+
+        document.getElementById("ethAddress").value = signer.address
 
         id = new ethers.Contract(identiconsAddress, abi, signer);
 
+        generate = async function() {
+            console.log("generate!");
+            let address = document.getElementById("ethAddress").value;
+            let svg = await id.generate(address, 0, 0,0,240);
+            document.getElementById("svgIdenticons-result").innerHTML = svg;
+            console.log(svg);
+        }
+
+
+        /**
+         * Initialization function. This will add a configuration for the
+         * punk picking function
+         * @returns {Promise<void>}
+         */
         init = async function() {
 
             let getKey = function (s) {
                 return keccak256(hexlify(toUtf8Bytes((s))))
             }
 
+            // configure the super-rare bases. Each sample corresponds to the
+            // number of leading zeros found in an address
             let srare = [
                 //
                 {"hash": getKey("Alien 2"), "sample": 5, "list" : 0},
@@ -107,6 +102,9 @@
                 {"hash": getKey("Blue Ape"), "sample": 16, "list" : 0},
                 {"hash": getKey("Alienette 5"), "sample": 17, "list" : 0}
             ];
+
+            // Configure the "bases" ie. the types of punks.
+            // probabilities are equal for uniform distribution
             let base = [
                 {"hash": getKey("Male 1"), "sample": 50000, "list" : 0},
                 {"hash": getKey("Male 2"), "sample": 50000, "list" : 0},
@@ -130,6 +128,8 @@
                 {"hash": getKey("Female 6"), "sample": 50000, "list" : 0},
                 {"hash": getKey("Female 7"), "sample": 50000, "list" : 0},
             ];
+
+            // large attributes, i.e. the male attributes
             let large = [
                 {"hash": getKey("Rosy Cheeks"), "sample": 50000, "list" : 0},
                 {"hash": getKey("Luxurious Beard"), "sample": 11000, "list" : 0},
@@ -211,6 +211,8 @@
                 {"hash": getKey("Suit Black"), "sample": 10000, "list" : 0}
 
             ];
+
+            // small attributes, i.e. the female attributes
             let small = [
                 {"hash": getKey("Pilot Helmet"), "sample": 5400, "list" : 0},
                 {"hash": getKey("Tassle Hat"), "sample": 3780, "list" : 0},
@@ -288,8 +290,6 @@
                 {"hash": getKey("Suit Black"), "sample": 10000, "list" : 0}
             ];
 
-            console.log(srare);
-
             await id.setConfig(
                 srare,
                 base,
@@ -298,46 +298,16 @@
                 100000
             );
 
-
-
         }
         document.getElementById("init-button").addEventListener("click", init);
-
+        document.getElementById("svgIdenticons-button").addEventListener("click", generate);
 
         console.log("=====");
-
-
         provider.on("block", (b) => console.log("new block", b));
 
     }
 
-
-
     run();
 </script>
-<script>
 
-    const broken = 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbG5zOnhsaW5rPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hsaW5rIiB2ZXJzaW9uPSIxLjEiIHg9IjBweCIgeT0iMHB4IiB2aWV3Qm94PSIwIDAgMTAwMCAxMDAwIiBlbmFibGUtYmFja2dyb3VuZD0ibmV3IDAgMCAxMDAwIDEwMDAiIHhtbDpzcGFjZT0icHJlc2VydmUiPgo8bWV0YWRhdGE+IFN2ZyBWZWN0b3IgSWNvbnMgOiBodHRwOi8vd3d3Lm9ubGluZXdlYmZvbnRzLmNvbS9pY29uIDwvbWV0YWRhdGE+CjxnPjxnIHRyYW5zZm9ybT0idHJhbnNsYXRlKDAuMDAwMDAwLDUxMS4wMDAwMDApIHNjYWxlKDAuMTAwMDAwLC0wLjEwMDAwMCkiPjxwYXRoIGQ9Ik0xMzI0LjYsNDk4MS4zYy03LjItMTYuNy05LjYtMjIyMy4yLTcuMi00OTAxLjJsNy4yLTQ4NzAuMWgzNjczLjVoMzY3My41bDcuMiwyMTM3LjFjMi40LDExNzIuNiwwLDIxMzQuNy03LjIsMjEzNC43Yy05LjYsMC0xODA5LjItMTI2MS4yLTE5MTYuOS0xMzQyLjZjLTE0LjQtMTItMjU2LjEsMjk0LjQtNjU1LjcsODQwYy01NDAuOCw3MzcuMS02MzYuNiw4NTYuNy02NjcuNyw4MzAuNGMtMjEuNS0xNi44LTMzNy41LTI4MC03MDMuNi01ODMuOWMtMzY2LjItMzA2LjMtNjcyLjUtNTU3LjYtNjg0LjQtNTU3LjZjLTkuNiwwLTI4MCwyNDQuMS02MDAuNyw1NDAuOGwtNTg2LjMsNTQzLjNMMjQ5MC0yNjIuMWwtMzY2LjItMTYuOEwyNDQ5LjMtNi4xbDMyNS41LDI3NS4ybDYzOS00MDkuMmMzNTEuOC0yMjUsNjU1LjctNDE0LDY3NC45LTQxOC44YzIxLjUtNC44LDM2MS40LDIyNSw3ODkuNyw1NDAuOWM0MTQsMzAxLjUsNzYxLDU0My4yLDc3MC42LDUzOC40YzkuNi03LjIsMjg0LjgtMzYxLjQsNjA3LjktNzg5LjdjMzI1LjUtNDI2LDYwMC43LTc3Myw2MTUtNzY4LjJjMTIsMi40LDQyMy42LDMzMi43LDkxNi42LDczMi4zbDg5NSw3MjcuNXYxMjcwLjh2MTI2OC40TDc2NjEuNiwzOTg1LjdMNjYzNy40LDUwMTBIMzk4NS44QzE4ODYuOSw1MDEwLDEzMzEuNyw1MDAyLjgsMTMyNC42LDQ5ODEuM3ogTTYyMjMuMywzNTgxLjNsNy4yLTEwMjQuM2wxMDI0LjMtNy4ybDEwMjEuOS00Ljh2LTk2NC40VjYxOC41TDc2MTguNiw4MC4xYy0zNjEuNC0yOTYuOC02NjcuNy01MzguNS02NzkuNy01MzguNWMtMTIsMC0yNTMuNywzMDEuNS01MzMuNyw2NzAuMWMtMjgwLDM2OC41LTU0OCw3MjAuMy01OTUuOSw3ODIuNmwtODYuMiwxMTIuNWwtODE2LTU5NS45TDQwOTEuMS04Ny40bC02NzQuOSw0MzAuOGwtNjc0LjksNDMwLjhsLTEyMi4xLTEwMi45Yy02Ny01Ny41LTI5NC40LTI0Ni41LTUwNS00MjMuNkwxNzMxLjQtNzAuN2wtNy4yLDIzMDdjLTIuNCwxMjY4LjQsMCwyMzIxLjQsNy4yLDIzMzguMWM3LjIsMjEuNSw0ODEsMjguNywyMjQ5LjYsMjguN2gyMjM3LjZMNjIyMy4zLDM1ODEuM3ogTTczNzIuMSwzNzAwLjljMzkyLjUtMzkyLjUsNzEzLjItNzIwLjMsNzEzLjItNzMyLjNjMC05LjYtMzI1LjUtMTQuNC03MjIuOC0xMmwtNzI1LjEsNy4ybC03LjIsNzI1LjFjLTIuNCwzOTcuMywyLjQsNzIyLjcsMTIsNzIyLjdTNjk4Miw0MDkxLDczNzIuMSwzNzAwLjl6IE0zMzYxLjEtMTI3NC40YzU5My41LTU1Mi44LDY2Mi45LTYwNy45LDY5OC44LTU3Ni44YzQwLjcsMzMuNSwxMDI5LjEsODQ0LjgsMTIyNy43LDEwMDUuMWwxMTAuMSw4OC42bDYxNS04MzcuNmw2MTUtODM3LjZsMTEyLjUsNzYuNmM2Mi4yLDQzLjEsNDE4LjgsMjkyLDc5NC41LDU1Mi44YzM3NS43LDI2My4zLDY5Ni40LDQ4My40LDcxMy4yLDQ4OC4yYzIzLjksOS42LDI4LjctMjk5LjEsMjMuOS0xNTI2LjhsLTcuMi0xNTQxLjJINDk5OC4xSDE3MzEuNGwtNy4yLDE4MzcuOWMtNC44LDE0NTkuOCwwLDE4MzUuNiwyMy45LDE4MzcuOWM2NC42LDcuMiw2ODQuNCwzOC4zLDgxNi4xLDQwLjdsMTM4LjgsNC44TDMzNjEuMS0xMjc0LjR6Ii8+PC9nPjwvZz4KPC9zdmc+';
-    const output = document.getElementById('output');
-
-
-
-
-
-
-    async function svgFromNames(e) {
-        e.preventDefault();
-        const text = document.getElementById('svgFromNames');
-        const attributes = text.value.split(',').map(s=>s.trim());
-        let svg = await pb.svgFromNames(attributes, 0, 0, 480, 0);
-        document.getElementById('svgFromNames-result').innerHTML = svg;
-    }
-
-
-
-    document.getElementById("init-button").addEventListener("click", init);
-
-
-
-</script>
 </html>

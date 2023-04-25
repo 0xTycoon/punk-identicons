@@ -8,7 +8,7 @@ The generator contract is deployed to: [0x69058dc511d5dd3117ebfaa08036b698d5cb27
 
 TODO: Redeploy v0.0.1 and initialize.
 
-Punk identicons are returned as SVG images.
+Punk Identicons are built on top of [Punk Blocks](https://github.com/0xTycoon/punk-blocks/) and are returned as SVG images.
 
 Bonus feature: rare faces depending on the amount of leading zeros in the 160-bit random number.
 
@@ -25,6 +25,10 @@ Before:
 After:
 
 ![After](mm-example-new.png)
+
+### Demo UI
+
+[A demo UI has been deployed here](https://0xtycoon.github.io/punk-identicons/). View the source of the page to see how it's done (Using vanilla JS)
 
 ### Limitations
 
@@ -81,6 +85,8 @@ await id.setConfig(
 
 ```
 
+See the web UI demo source code for a better example with more traits.
+
 ### Adding new traits
 
 You can add new traits by using [Punk Blocks](https://github.com/0xTycoon/punk-blocks)
@@ -93,24 +99,44 @@ You can add new traits by using [Punk Blocks](https://github.com/0xTycoon/punk-b
 #### Solidity Interface
 
 ```solidity
-/**
-* @dev generates a punk, picking traits using a random seed
-* @param _a the random seed
-* @param _cid the config id
-*/
-function generate(
-    address _a,
-    uint64 _cid) view external returns (string memory);
+    /**
+    * @dev generates a punk, picking traits using a random seed
+    * @param _a the random seed
+    * @param _cid the config id
+    * @param _x the horizontal position of the SVG
+    * @param _y the vertical position of the SVG
+    * @param _size the width and height of the SVG
+    * @return string of the punk svg generated
+    */
+    function generate(
+        address _a,
+        uint64 _cid,
+        uint16 _x,
+        uint16 _y,
+        uint16 _size
+    ) view external returns (string memory);
+
+    /**
+    * @dev picks a punk, picking traits using a random seed, returning the
+    *   hashes of the seeds. Each hash represent a key for for a punk-block
+    * @param _a the random seed
+    * @param _cid the config id
+    * @return bytes32[] representing the punk-block hashes.
+    */
+    function pick(
+        address _a,
+        uint64 _cid) view external returns (bytes32[] memory);
 ```
 
 #### ethers js
 
 ```javascript
-let punk = await id.generate(owner.address, 0);
+let punk = await id.generate(owner.address, 0, 0, 0, 240);
             console.log(punk);
 ```
 
 ### Address mining estimations
+
 
 The super-rare faces are decided by the amount of leading zeros in front of
 the random number given. If these were Ethereum addresses, here's how long
