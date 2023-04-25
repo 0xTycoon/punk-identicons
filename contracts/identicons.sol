@@ -258,7 +258,7 @@ contract Identicons {
     * Generate a uniform random number between 0 - _upperBound
     * See https://medium.com/hownetworks/dont-waste-cycles-with-modulo-bias-35b6fdafcf94
     */
-    function _uniform(uint256 _entropy, uint256 _upperBound) internal view returns (uint256) {
+    function _uniform(uint256 _entropy, uint256 _upperBound) internal pure returns (uint256) {
         unchecked {
             uint256 negate = type(uint256).max - _upperBound + 1; // negate 2's compliment
             uint256 min = negate % _upperBound;

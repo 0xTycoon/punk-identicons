@@ -38,16 +38,19 @@ describe("Identicons", function () {
 
             let srare = [
                 //
+                {"hash": getKey("Alien 3"), "sample": 5, "list" : 0},
+                {"hash": getKey("Alienette 3"), "sample": 6, "list" : 0},
                 {"hash": getKey("Killer Bot"), "sample": 7, "list" : 0},
                 {"hash": getKey("Killer Botina"), "sample": 8, "list" : 0},
                 {"hash": getKey("Green Alien"), "sample": 9, "list" : 0},
                 {"hash": getKey("Green Alienette"), "sample": 10, "list" : 0},
-                {"hash": getKey("Alien 2"), "sample": 11, "list" : 0},
-                {"hash": getKey("Alien 3"), "sample": 12, "list" : 0},
-                {"hash": getKey("Alien 4"), "sample": 13, "list" : 0},
-                {"hash": getKey("Alien 5"), "sample": 14, "list" : 0},
+                {"hash": getKey("Alien 4"), "sample": 11, "list" : 0},
+                {"hash": getKey("Alienette 4"), "sample": 12, "list" : 0},
+                {"hash": getKey("Alien 5"), "sample": 13, "list" : 0},
+                {"hash": getKey("Alienette 5"), "sample": 14, "list" : 0},
                 {"hash": getKey("Alien 6"), "sample": 15, "list" : 0},
-                {"hash": getKey("Blue Ape"), "sample": 16, "list" : 0}
+                {"hash": getKey("Blue Ape"), "sample": 16, "list" : 0},
+                {"hash": getKey("Alienette 6"), "sample": 17, "list" : 0}
             ];
             let base = [
                 {"hash": getKey("Male 1"), "sample": 50000, "list" : 0},
@@ -68,11 +71,12 @@ describe("Identicons", function () {
                 {"hash": getKey("Male 5"), "sample": 50000, "list" : 0},
                 {"hash": getKey("Male 6"), "sample": 50000, "list" : 0},
                 {"hash": getKey("Male 7"), "sample": 50000, "list" : 0},
-                {"hash": getKey("Male 8"), "sample": 50000, "list" : 0},
                 {"hash": getKey("Female 5"), "sample": 50000, "list" : 0},
                 {"hash": getKey("Female 6"), "sample": 50000, "list" : 0},
                 {"hash": getKey("Female 7"), "sample": 50000, "list" : 0},
-                {"hash": getKey("Female 8"), "sample": 50000, "list" : 0}
+                {"hash": getKey("Pink Ape"), "sample": 50000, "list" : 0},
+                {"hash": getKey("Alien 2"), "sample": 50000, "list" : 0},
+                {"hash": getKey("Alienette 2"), "sample": 50000, "list" : 0},
             ];
             let large = [
                 {"hash": getKey("Rosy Cheeks"), "sample": 50000, "list" : 0},
