@@ -75,7 +75,7 @@ describe("Identicons", function () {
                 {"hash": getKey("Alienette 6"), "sample": 17, "list" : 0}
             ];
 
-            // apette is missing below
+
             let base = [
                 {"hash": getKey("Male 1"), "sample": 50000, "list" : 0},
                 {"hash": getKey("Male 2"), "sample": 50000, "list" : 0},
@@ -87,7 +87,6 @@ describe("Identicons", function () {
                 {"hash": getKey("Female 4"), "sample": 50000, "list" : 0},
                 {"hash": getKey("Zombie"), "sample": 50000, "list" : 0},
                 {"hash": getKey("Ape"), "sample": 50000, "list" : 0},
-                {"hash": getKey("Apette"), "sample": 50000, "list" : 0},
                 {"hash": getKey("Alien"), "sample": 50000, "list" : 0},
                 {"hash": getKey("Bot"), "sample": 50000, "list" : 0},
                 {"hash": getKey("Botina"), "sample": 50000, "list" : 0},
@@ -102,6 +101,18 @@ describe("Identicons", function () {
                 {"hash": getKey("Pink Ape"), "sample": 50000, "list" : 0},
                 {"hash": getKey("Alien 2"), "sample": 50000, "list" : 0},
                 {"hash": getKey("Alienette 2"), "sample": 50000, "list" : 0},
+
+                {"hash": getKey("Apette"), "sample": 50000, "list" : 0},
+                    {"hash": getKey("ZombieApe"), "sample": 50000, "list" : 0},
+                    {"hash": getKey("Cigarina"), "sample": 50000, "list" : 0},
+                    {"hash": getKey("Cyborghina 1"), "sample": 50000, "list" : 0},
+                    {"hash": getKey("Cyborghina 2"), "sample": 50000, "list" : 0},
+                    {"hash": getKey("Cyborghina 3"), "sample": 50000, "list" : 0},
+                    {"hash": getKey("Cyborghina 4"), "sample": 50000, "list" : 0},
+                    {"hash": getKey("Apexus 1"), "sample": 50000, "list" : 0},
+                    {"hash": getKey("Apexus 2"), "sample": 50000, "list" : 0},
+                    {"hash": getKey("Apexus 3"), "sample": 50000, "list" : 0},
+                    {"hash": getKey("Apexus 4"), "sample": 50000, "list" : 0},
             ];
             let large = [
                 {"hash": getKey("Rosy Cheeks"), "sample": 50000, "list" : 0},
@@ -168,9 +179,9 @@ describe("Identicons", function () {
                 {"hash": getKey("Clown Eyes Blue"), "sample": 25000, "list" : 0},
                 {"hash": getKey("Mohawk"), "sample": 4410, "list" : 9},
                 {"hash": getKey("Stogie"), "sample": 50000, "list" : 0},
-                {"hash": getKey("Earphone"), "sample": 30000, "list" : 0},
+                {"hash": getKey("Headset"), "sample": 30000, "list" : 0},
                 {"hash": getKey("Employee Cap"), "sample": 30000, "list" : 0},
-                {"hash": getKey("Headphones"), "sample": 20000, "list" : 0},
+                {"hash": getKey("Earbuds"), "sample": 20000, "list" : 0},
                 {"hash": getKey("Headphones Red"), "sample": 15000, "list" : 0},
                 {"hash": getKey("Headphones Yellow"), "sample": 12500, "list" : 0},
                 {"hash": getKey("Gas Mask"), "sample": 15000, "list" : 0},
@@ -245,9 +256,9 @@ describe("Identicons", function () {
                 {"hash": getKey("Horned Rim Glasses"), "sample": 5350, "list" : 0},
                 {"hash": getKey("Silver Chain"), "sample": 50000, "list" : 0},
                 {"hash": getKey("Stogie"), "sample": 50000, "list" : 0},
-                {"hash": getKey("Earphone"), "sample": 33333, "list" : 0},
+                {"hash": getKey("Headset"), "sample": 33333, "list" : 0},
                 {"hash": getKey("Employee Cap"), "sample": 33333, "list" : 9},
-                {"hash": getKey("Headphones"), "sample": 20000, "list" : 0},
+                {"hash": getKey("Earbuds"), "sample": 20000, "list" : 0},
                 {"hash": getKey("Headphones Red"), "sample": 15000, "list" : 0},
                 {"hash": getKey("Headphones Yellow"), "sample": 12500, "list" : 0},
                 {"hash": getKey("Gas Mask"), "sample": 15000, "list" : 0},

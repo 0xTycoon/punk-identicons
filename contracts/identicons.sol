@@ -74,10 +74,11 @@ contract Identicons {
         Trait[] calldata _largeTraits,
         Trait[] calldata _smallTraits,
         uint256 _population,
-        uint32 configId
+        uint32 _orderConfigId
     ) external {
         uint256 info;
         Config storage c = cfg[nextConfigId];
+        c.orderConfigId = _orderConfigId;
         for (uint256 i = 0; i < _superRare.length; i++) {
             require(_superRare[i].sample <= _population, "sample too big");
             info = pb.blocksInfo(_superRare[i].hash);
