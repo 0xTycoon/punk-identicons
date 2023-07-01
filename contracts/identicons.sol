@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: MiT
 // Author: tycoon.eth
-// v0.0.1
+// v0.0.2
 pragma solidity ^0.8.19;
 
 // Uncomment this line to use console.log
@@ -30,7 +30,7 @@ Uses punkblocks to source the traits and assemble them on an SVG.
 
 contract Identicons {
 
-    IPunkBlocks pb = IPunkBlocks(0xe91Eb909203c8C8cAd61f86fc44EDeE9023bdA4D);
+    IPunkBlocks pb = IPunkBlocks(0x829e113C94c1acb6b1b5577e714E486bb3F86593);
     struct Trait {
         bytes32 hash;   // The hash of the name
         uint128 sample; // count of occurrences in a population
@@ -42,6 +42,7 @@ contract Identicons {
         Trait[][13] largeTraits; // the "male" traits, grouped by lists to choose from
         Trait[][13] smallTraits; // the "female" traits, grouped by lists to choose from
         uint256 population;
+        uint32 orderConfigId;         // the orderConfig from the punk-blocks contract
     }
     uint64 public nextConfigId;
     mapping (uint64 => Config) private cfg;
@@ -72,7 +73,9 @@ contract Identicons {
         Trait[] calldata _baseTraits,
         Trait[] calldata _largeTraits,
         Trait[] calldata _smallTraits,
-        uint256 _population) external {
+        uint256 _population,
+        uint32 configId
+    ) external {
         uint256 info;
         Config storage c = cfg[nextConfigId];
         for (uint256 i = 0; i < _superRare.length; i++) {
@@ -169,7 +172,7 @@ contract Identicons {
         uint16 _size
     ) view external returns (string memory) {
         bytes32[] memory traits = _generate(_a, _cid);
-        string memory ret = pb.svgFromKeys(traits, _x, _y, _size, 0);
+        string memory ret = pb.svgFromKeys(traits, _x, _y, _size, cfg[_cid].orderConfigId);
         return ret;
     }
 

@@ -6,7 +6,7 @@ let owner, simp, elizabeth;
 
 describe("Identicons", function () {
     let pb;
-    let Identicons, id
+    let Identicons, id, f
     before(async function () {
         /*
         PunkBlocks = await ethers.getContractFactory("PunkBlocks");
@@ -21,9 +21,13 @@ describe("Identicons", function () {
         id = await Identicons.deploy();
         await id.deployed();
 
-        let Factory = await ethers.getContractFactory("FactoryPunks2");
-        await Factory.deploy(PB_ADDRESS);
+        //let Factory = await ethers.getContractFactory("FactoryPunks2");
+        //f = await Factory.deploy(PB_ADDRESS);
+        //await f.deployed();
 
+        //Factory = await ethers.getContractFactory("FactoryPunks3");
+        //f = await Factory.deploy(PB_ADDRESS);
+        //await f.deployed();
     });
 
     describe("TestRender", function () {
@@ -38,6 +42,24 @@ describe("Identicons", function () {
 
             let srare = [
                 //
+
+                /*
+                zeros = name
+                5 = Alien 3
+                6 = Alienette 3
+                7 = Killer Bot
+                8 = Killer Bofftina
+                9 = Green Alien
+                10 = Green Alienette
+                11 = Alien 4
+                12 = Alienette 4
+                13 = Alien 5
+                14 = Alienette 5
+                15 = Alien 6
+                16 = Blue Ape
+                17 = Alienette 6
+                 */
+
                 {"hash": getKey("Alien 3"), "sample": 5, "list" : 0},
                 {"hash": getKey("Alienette 3"), "sample": 6, "list" : 0},
                 {"hash": getKey("Killer Bot"), "sample": 7, "list" : 0},
@@ -52,6 +74,8 @@ describe("Identicons", function () {
                 {"hash": getKey("Blue Ape"), "sample": 16, "list" : 0},
                 {"hash": getKey("Alienette 6"), "sample": 17, "list" : 0}
             ];
+
+            // apette is missing below
             let base = [
                 {"hash": getKey("Male 1"), "sample": 50000, "list" : 0},
                 {"hash": getKey("Male 2"), "sample": 50000, "list" : 0},
@@ -63,6 +87,7 @@ describe("Identicons", function () {
                 {"hash": getKey("Female 4"), "sample": 50000, "list" : 0},
                 {"hash": getKey("Zombie"), "sample": 50000, "list" : 0},
                 {"hash": getKey("Ape"), "sample": 50000, "list" : 0},
+                {"hash": getKey("Apette"), "sample": 50000, "list" : 0},
                 {"hash": getKey("Alien"), "sample": 50000, "list" : 0},
                 {"hash": getKey("Bot"), "sample": 50000, "list" : 0},
                 {"hash": getKey("Botina"), "sample": 50000, "list" : 0},
@@ -243,9 +268,10 @@ describe("Identicons", function () {
                 base,
                 large,
                 small,
-                100000
+                100000,
+                0
             );
-            let punk = await id.generate(owner.address, 0, 0, 240, 0);
+            let punk = await id.generate(owner.address, 0, 0, 0, 240);
             console.log(punk);
 
         });
@@ -551,4 +577,4 @@ const PB_ABI = [{
     "stateMutability": "pure",
     "type": "function"
 }];
-const PB_ADDRESS = "0xe91Eb909203c8C8cAd61f86fc44EDeE9023bdA4D";
+const PB_ADDRESS = "0x855f61Eedd85cBB65c722f3e768992aC55e1A3fb";
