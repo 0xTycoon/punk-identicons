@@ -4,9 +4,8 @@ Punk identicons allow you to generate punks based on a random number.
 
 Built on Punk-blocks, this contract implements a punk-picking function.
 
-The generator contract is deployed to: [0xc55C7913BE9E9748FF10a4A7af86A5Af25C46047](https://etherscan.io/address/0xc55C7913BE9E9748FF10a4A7af86A5Af25C46047#code)
+The generator contract (v0.0.2) is deployed to: [0xb7f596579cd5d9ade583c90477ef1b5e2d47359e](https://etherscan.io/address/0xb7f596579cd5d9ade583c90477ef1b5e2d47359e#code)
 
-TODO: Redeploy v0.0.1 and initialize.
 
 Punk Identicons are built on top of [Punk Blocks](https://github.com/0xTycoon/punk-blocks/) and are returned as SVG images.
 
