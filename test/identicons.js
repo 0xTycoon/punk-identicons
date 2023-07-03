@@ -95,10 +95,11 @@ describe("Identicons", function () {
                 {"hash": getKey("Male 5"), "sample": 50000, "list" : 0},
                 {"hash": getKey("Male 6"), "sample": 50000, "list" : 0},
                 {"hash": getKey("Male 7"), "sample": 50000, "list" : 0},
+                {"hash": getKey("Pink Ape"), "sample": 50000, "list" : 0},
                 {"hash": getKey("Female 5"), "sample": 50000, "list" : 0},
                 {"hash": getKey("Female 6"), "sample": 50000, "list" : 0},
                 {"hash": getKey("Female 7"), "sample": 50000, "list" : 0},
-                {"hash": getKey("Pink Ape"), "sample": 50000, "list" : 0},
+
                 {"hash": getKey("Alien 2"), "sample": 50000, "list" : 0},
                 {"hash": getKey("Alienette 2"), "sample": 50000, "list" : 0},
 

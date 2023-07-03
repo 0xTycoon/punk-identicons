@@ -67,6 +67,7 @@ contract Identicons {
     * @param _smallTraits. A list of all the small (typically female) traits to
     *    choose from.
     * @param _population the total population.
+    * @param _orderConfigId which punk-block ordering config to use
     */
     function setConfig(
         Trait[] calldata _superRare,

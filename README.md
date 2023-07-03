@@ -79,7 +79,8 @@ await id.setConfig(
     base,
     large,
     small,
-    100000
+    100000,
+    0
 );
 
 ```
@@ -125,6 +126,30 @@ You can add new traits by using [Punk Blocks](https://github.com/0xTycoon/punk-b
     function pick(
         address _a,
         uint64 _cid) view external returns (bytes32[] memory);
+
+/**
+    * @dev Set a new configuration for picking
+    * @param _superRare The super-rare traits assigned depending on the number
+    *    of leading zeros. Each trait.sample sets how many zeros will be required
+    *    to match the trait.
+    * @param _baseTraits. A list of all the faces, aka "base traits". These
+    *    will be used to determine the type of the punk and traits will be
+    *    drawn on top.
+    * @param _largeTraits. A list of all the large (typically male) traits to
+    *    choose from.
+    * @param _smallTraits. A list of all the small (typically female) traits to
+    *    choose from.
+    * @param _population the total population.
+    * @param _orderConfigId which punk-block ordering config to use
+    */
+    function setConfig(
+        Trait[] calldata _superRare,
+        Trait[] calldata _baseTraits,
+        Trait[] calldata _largeTraits,
+        Trait[] calldata _smallTraits,
+        uint256 _population,
+        uint32 _orderConfigId
+    ) external;
 ```
 
 #### ethers js
